@@ -49,13 +49,17 @@ An autonomous AI system that coordinates multiple specialized agents to conduct 
 
 ## 🏃‍♂️ Usage
 
-Run the main script and follow the prompts:
+### Option 1: Web Interface (Recommended)
+
+Run the Streamlit app for a user-friendly experience:
 
 ```bash
-python main.py
+streamlit run app.py
 ```
 
-Or provide a topic directly as an argument:
+### Option 2: Command Line
+
+Run the main script and provide a topic directly:
 
 ```bash
 python main.py "The future of Generative AI in Healthcare"
