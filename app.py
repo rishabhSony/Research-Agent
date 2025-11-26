@@ -36,10 +36,10 @@ def main():
         st.header("Configuration")
         
         # Check for API Keys
-        openai_key = os.getenv("OPENAI_API_KEY")
+        google_key = os.getenv("GOOGLE_API_KEY")
         tavily_key = os.getenv("TAVILY_API_KEY")
         
-        if not openai_key or not tavily_key:
+        if not google_key or not tavily_key:
             st.warning("⚠️ API Keys missing! Please check your .env file.")
         else:
             st.success("✅ API Keys configured")
@@ -68,7 +68,7 @@ def main():
         report_container = st.empty()
         
         if start_btn and topic:
-            if not openai_key or not tavily_key:
+            if not google_key or not tavily_key:
                 st.error("Please configure your API keys first.")
                 return
 

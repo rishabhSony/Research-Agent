@@ -1,11 +1,11 @@
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.output_parsers import StrOutputParser
 from utils.config import Config
 
 class WriterAgent:
     def __init__(self):
-        self.llm = ChatOpenAI(model=Config.MODEL_NAME, temperature=0.7)
+        self.llm = ChatGoogleGenerativeAI(model=Config.MODEL_NAME, temperature=0.7, google_api_key=Config.GOOGLE_API_KEY)
         
         self.prompt = ChatPromptTemplate.from_template(
             """

@@ -1,52 +1,81 @@
+import argparse
+import logging
 import sys
 from agents.researcher import ResearcherAgent
 from agents.writer import WriterAgent
 from utils.config import Config
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger(__name__)
+
+def setup_args():
+    parser = argparse.ArgumentParser(description="Multi-Agent Research Assistant")
+    parser.add_argument("topic", nargs="*", help="The topic to research")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output")
+    return parser.parse_args()
+
 def main():
+    args = setup_args()
+    
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
     try:
-        # Validate environment variables
         Config.validate()
     except ValueError as e:
-        print(f"❌ Configuration Error: {e}")
-        print("Please create a .env file with OPENAI_API_KEY and TAVILY_API_KEY")
-        return
+        logger.error(f"Configuration Error: {e}")
+        logger.info("Please ensure .env file contains OPENAI_API_KEY and TAVILY_API_KEY")
+        sys.exit(1)
 
-    print("🤖 Multi-Agent Research Assistant Initialized")
-    print("---------------------------------------------")
+    logger.info("Initializing Multi-Agent Research Assistant...")
     
-    if len(sys.argv) > 1:
-        topic = " ".join(sys.argv[1:])
+    if args.topic:
+        topic = " ".join(args.topic)
     else:
-        topic = input("Enter a topic to research: ")
+        try:
+            topic = input("Enter a topic to research: ").strip()
+        except KeyboardInterrupt:
+            print("\n")
+            logger.info("Exiting...")
+            sys.exit(0)
 
     if not topic:
-        print("❌ No topic provided. Exiting.")
-        return
+        logger.warning("No topic provided. Exiting.")
+        sys.exit(0)
 
-    # Initialize Agents
-    researcher = ResearcherAgent()
-    writer = WriterAgent()
+    try:
+        # Initialize Agents
+        researcher = ResearcherAgent()
+        writer = WriterAgent()
 
-    # Step 1: Research
-    print("\n--- Step 1: Gathering Information ---")
-    research_summary = researcher.research(topic)
-    
-    # Step 2: Write Report
-    print("\n--- Step 2: Generating Report ---")
-    final_report = writer.write_report(topic, research_summary)
+        # Phase 1: Research
+        logger.info(f"Starting research on: {topic}")
+        research_summary = researcher.research(topic)
+        
+        # Phase 2: Writing
+        logger.info("Synthesizing research into final report...")
+        final_report = writer.write_report(topic, research_summary)
 
-    # Output Result
-    print("\n\n" + "="*50)
-    print("FINAL REPORT")
-    print("="*50 + "\n")
-    print(final_report)
-    
-    # Save to file
-    filename = f"{topic.replace(' ', '_').lower()}_report.md"
-    with open(filename, "w") as f:
-        f.write(final_report)
-    print(f"\n\n✅ Report saved to {filename}")
+        # Output
+        print("\n" + "="*50)
+        print("FINAL REPORT")
+        print("="*50 + "\n")
+        print(final_report)
+        
+        # Save artifact
+        filename = f"{topic.replace(' ', '_').lower()}_report.md"
+        with open(filename, "w") as f:
+            f.write(final_report)
+        logger.info(f"Report saved successfully to {filename}")
+
+    except Exception as e:
+        logger.exception(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

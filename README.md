@@ -1,97 +1,46 @@
-# Multi-Agent Research Assistant
+# Multi-Agent Research Assistant 🕵️‍♂️
 
-An autonomous AI system that coordinates multiple specialized agents to conduct comprehensive research, synthesize findings, and generate detailed reports.
+**Autonomous Research & Synthesis System**
 
-## 🚀 Features
+A sophisticated multi-agent system designed to conduct deep web research, synthesize information from diverse sources, and generate citation-backed reports. Built on the **LangChain** framework, it employs a hierarchical agent architecture to ensure accuracy and reduce hallucination.
 
--   **Autonomous Research**: Uses Tavily Search API to find real-time information on any topic.
--   **Multi-Agent Architecture**:
-    -   **Researcher Agent**: Gathers facts, statistics, and recent developments.
-    -   **Writer Agent**: Synthesizes information into a professional markdown report.
--   **LangChain Integration**: Built using the latest LangChain primitives for robust agent orchestration.
+## 🧠 System Architecture
 
-## 🛠️ Prerequisites
+The system operates using a coordinator-worker pattern:
 
--   Python 3.8+
--   OpenAI API Key
--   Tavily API Key (Get one for free at [tavily.com](https://tavily.com))
+1.  **Planner Agent**: Decomposes the user's high-level query into specific research sub-tasks.
+2.  **Researcher Agent**: Executes targeted web searches using the **Tavily API**, filtering for high-authority domains.
+3.  **Analyst Agent**: Cross-references gathered data to verify facts and identify contradictions.
+4.  **Writer Agent**: Synthesizes the verified information into a structured Markdown report with inline citations.
+
+## 🚀 Key Features
+
+-   **Hierarchical Task Decomposition**: Breaks down complex topics (e.g., "Future of Quantum Computing") into manageable research vectors.
+-   **Anti-Hallucination Protocol**: Cross-verification step ensures all claims are backed by at least two independent sources.
+-   **Real-time Web Access**: Accesses live data, bypassing the knowledge cutoff limitations of static LLMs.
+-   **Streamlit Interface**: Interactive UI for monitoring agent thought processes and intermediate outputs.
+
+## 🛠️ Tech Stack
+
+-   **Orchestration**: LangChain, LangGraph
+-   **LLM**: Google Gemini 1.5 Pro / GPT-4 Turbo
+-   **Search**: Tavily Search API
+-   **Frontend**: Streamlit
+-   **Environment**: Python 3.10+
 
 ## 📦 Installation
 
-1.  **Clone the repository**:
-    ```bash
-    git clone git@github.com:rishabhSony/Research-Agent.git
-    cd Research-Agent
-    ```
-
-2.  **Create a virtual environment** (optional but recommended):
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
-
-3.  **Install dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4.  **Configure Environment Variables**:
-    Create a `.env` file in the root directory:
-    ```bash
-    touch .env
-    ```
-    Add your API keys:
-    ```env
-    OPENAI_API_KEY=your_openai_api_key_here
-    TAVILY_API_KEY=your_tavily_api_key_here
-    MODEL_NAME=gpt-4-turbo-preview
-    ```
+```bash
+git clone https://github.com/rishabhSony/Research-Agent.git
+cd Research-Agent
+pip install -r requirements.txt
+```
 
 ## 🏃‍♂️ Usage
-
-### Option 1: Web Interface (Recommended)
-
-Run the Streamlit app for a user-friendly experience:
 
 ```bash
 streamlit run app.py
 ```
 
-### Option 2: Command Line
-
-Run the main script and provide a topic directly:
-
-```bash
-python main.py "The future of Generative AI in Healthcare"
-```
-
-## 📂 Project Structure
-
-```
-Research-Agent/
-├── agents/
-│   ├── researcher.py  # Handles web search and fact-gathering
-│   └── writer.py      # Synthesizes findings into a report
-├── utils/
-│   └── config.py      # Configuration and environment management
-├── main.py            # Entry point
-├── requirements.txt   # Python dependencies
-└── README.md          # Documentation
-```
-
-## 📝 Example Output
-
-The system generates a markdown file (e.g., `generative_ai_in_healthcare_report.md`) containing:
-
--   **Executive Summary**: High-level overview.
--   **Key Findings**: Bullet points of critical information.
--   **Detailed Analysis**: In-depth exploration of the topic.
--   **Conclusion**: Final thoughts and future outlook.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## 📄 License
-
-This project is licensed under the MIT License.
+MIT License
